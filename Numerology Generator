@@ -1,0 +1,207 @@
+from collections import Counter
+
+# lETTER TO NUMBER CONVERSION DICTIONARY
+conv_dict = {
+    'a':1, 'b':2, 'c':3, 'd':4, 'e':5, 'f':6, 'g':7, 'h':8, 'i':9, 
+    'j':1, 'k':2, 'l':3, 'm':4, 'n':5, 'o':6, 'p':7, 'q':8, 'r':9,
+    's':1, 't':2, 'u':3, 'v':4, 'w':5, 'x':6, 'y':7, 'z':8
+    }
+
+
+# USER INPUT NAME & AGE
+# name = input("Tên Khách Hàng: ", type = text)
+# age = input("Ngày Tháng Năm Sinh Khách Hàng: ", type = NUMBER)
+name = "pham le phuong linh"
+age = "08101982"
+
+
+#Generate 9 Numerology metrics
+#def numerology(name,age):
+
+def numerology(n,a):
+
+    #check Vowels & Consonants
+    def vowel_check(text):
+        text = text.lower().replace(" ", "")
+        vowels = ["a", "e", "i", "o", "u"]
+        vowel_list = []
+        for s in text:
+            # if "y" sits next to another vowel in front or behind it, it is a consonant
+            if s == "y":
+                y_index = text.index("y")
+                if not (text[y_index + 1] in vowels or text[y_index - 1] in vowels):
+                    vowel_list.append(s) 
+            else: # "y" is not in the text string
+                if s in vowels:
+                    vowel_list.append(s)
+        return vowel_list
+    
+    def consonant_check(text):
+        text = text.lower().replace(" ", "")
+        vowels = ["a", "e", "i", "o", "u"]
+        consonant_list = []
+        for s in text:
+            # if "y" sits next to another vowel in front or behind it, it is a consonant
+            if s == "y":
+                y_index = text.index("y")
+                if (text[y_index + 1] in vowels or text[y_index - 1] in vowels):
+                    consonant_list.append(s) 
+            else: # "y" is not in the text string
+                if s not in vowels:
+                    consonant_list.append(s)
+        return consonant_list
+    
+    
+    # Master numbers
+    master = [11, 22, 33]
+    # convert User input Name into a list of strings
+    list_of_str = []
+    list_of_str[:0] = n.lower().replace(" ", "")
+    #convert all alphabetical letters to corresponding numbers
+    conv_list = [conv_dict[v] for v in list_of_str]
+    
+    #convert vowel list to corresponding numbers
+    vowel_list = vowel_check(n)
+    conv_vowel_list = [conv_dict[v] for v in vowel_list]
+    #convert consonant list to corresponding numbers
+    consonant_list = consonant_check(n)
+    conv_consonant_list = [conv_dict[v] for v in consonant_list]
+    
+        
+    #Metric #1 - SOUL - tổng các nguyên âm trong họ tên
+    def soul(n):
+        sum1 = sum(conv_vowel_list)
+        while sum1 > 9:
+            if sum1 in master:
+                break
+            else:
+                sum1 = sum([int(x) for x in str(sum1)])      
+        return sum1
+    
+    
+    #Metric #2 - FEELINGS - các con số lặp lại nhiều nhất trong họ tên
+    def feelings(n):
+        counts = Counter(conv_list)
+        max_count = counts.most_common(1)[0][1]
+        most_frequent = [value for value, count in counts.most_common() if count == max_count]
+        most_frequent.sort()
+        return " ".join(str(n) for n in most_frequent)
+    
+    
+    #Metric #3 - APPROACH - tổng của tên chính (first name)
+    def approach(n):
+        first_name = n.split()[-1].lower()
+        conv_first_name_list = [conv_dict[v] for v in first_name]
+        sum3 = sum(conv_first_name_list)
+        while sum3 > 9:
+            if sum3 in master:
+                break
+            else:
+                sum3 = sum([int(x) for x in str(sum3)])
+        return  sum3
+    
+    
+    #Metric #4 - INTELLIGENCE - tổng các nguyên âm trong tên chính (first name)
+    def intel(n):
+        first_name = n.split()[-1].lower()
+        vowel_list = vowel_check(first_name)
+        conv_first_name_vowel_list = [conv_dict[v] for v in vowel_list]
+        sum4 = sum(conv_first_name_vowel_list)
+        while sum4 > 9:
+            if sum4 in master:
+                break
+            else:
+                sum4 = sum([int(x) for x in str(sum4)])
+        return sum4
+    
+    #Metric #5 - BALANCE - tổng các chữ cái đầu trong họ tên
+    def balance(n):
+        first_letters = [letter[0].lower() for letter in n.split()]
+        conv_first_letters = [conv_dict[v] for v in first_letters]
+        sum5 = sum(conv_first_letters)
+        while sum5 > 9:
+            if sum5 in master:
+                break
+            else:
+                sum5 = sum([int(x) for x in str(sum5)])
+        return sum5
+    
+    #Metric #6 - INTERACTION - tổng phụ âm họ và tên
+    def interaction(n):
+        sum6 = sum(conv_consonant_list)
+        while sum6 > 9:
+            if sum6 in master:
+                break
+            else:
+                sum6 = sum([int(x) for x in str(sum6)])      
+        return sum6
+    
+    #Metric #7 - ATTITUDE - ngày và tháng sinh
+    def attitude(a):
+        birth_date_month = str(a)[:4]
+        sum7 = sum([int(x) for x in birth_date_month])
+        while sum7 > 9:
+            if sum7 in master:
+                break
+            else:
+                sum7 = sum([int(x) for x in str(sum7)]) 
+        return sum7
+    
+    #Metric #8 - LIFE PATH - tổng ngày tháng năm sinh
+    def life_path(a):
+        sum8 = sum([int(x) for x in str(a)])
+        while sum8 > 9:
+            if sum8 in master:
+                break
+            else:
+                sum8 = sum([int(x) for x in str(sum8)])
+        return sum8
+    
+    #Metric #9 - MISSION - tổng họ tên
+    def mission(n):
+        sum9 = sum([int(x) for x in conv_list])
+        while sum9 > 9:
+            if sum9 in master:
+                break
+            else:
+                sum9 = sum([int(x) for x in str(sum9)])
+        return int(sum9)
+    
+    #Metric #10 - MATURITY - tổng sứ mệnh + đường đời
+    def maturity(n,a):
+        lp = sum([int(x) for x in str(a)])      
+        ms = sum([int(x) for x in conv_list])
+        sum10 = lp + ms
+        while sum10 > 9:
+            if sum10 in master:
+                break
+            else:
+                sum10 = sum([int(x) for x in str(sum10)])
+        return sum10
+    
+    #FINAL OUTPUT
+    soul = str(soul(name))
+    feelings = feelings(name)
+    approach = str(approach(name))
+    intel = str(intel(name))
+    balance = str(balance(name))
+    interaction = str(interaction(name))
+    attitude = str(attitude(age))
+    life_path = str(life_path(age))
+    mission = str(mission(name))
+    maturity = str(maturity(name,age))
+    
+    return print("Tên: " + name + "\n" +
+                 "Ngày Sinh: " + age + "\n" +
+                 "Nội Tâm: " + soul + "\n" + 
+                 "Nội Cảm: " + feelings + "\n" + 
+                 "NL Tiếp Cận: "  +  approach + "\n" +
+                 "Trí Tuệ: " + intel + "\n" +
+                 "Cân Bằng: " + balance + "\n" +
+                 "Tương Tác: " + interaction + "\n"+
+                 "Thái Độ: " + attitude + "\n"+
+                 "Đường Đời: " + life_path + "\n" + 
+                 "Sứ Mệnh: " + mission + "\n" + 
+                 "Trưởng Thành: " + maturity)
+
+numerology(name,age)
