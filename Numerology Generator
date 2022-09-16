@@ -11,8 +11,8 @@ conv_dict = {
 # USER INPUT NAME & AGE
 # name = input("Tên Khách Hàng: ", type = text)
 # age = input("Ngày Tháng Năm Sinh Khách Hàng: ", type = NUMBER)
-name = "pham le phuong linh"
-age = "08101982"
+name = "dinh kim nga"
+age = "20081968"
 
 
 #Generate 9 Numerology metrics
